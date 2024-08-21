@@ -1,6 +1,6 @@
-package BookstoreAPI.repository;
+package com.BookstoreAPI.repository;
 
-import BookstoreAPI.model.Book;
+import com.BookstoreAPI.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

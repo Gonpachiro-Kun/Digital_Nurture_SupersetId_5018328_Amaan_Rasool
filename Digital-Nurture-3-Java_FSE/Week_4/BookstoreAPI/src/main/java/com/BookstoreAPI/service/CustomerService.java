@@ -1,7 +1,7 @@
-package BookstoreAPI.service;
+package com.BookstoreAPI.service;
 
-import BookstoreAPI.model.Customer;
-import BookstoreAPI.repository.Customer_Repository;
+import com.BookstoreAPI.model.Customer;
+import com.BookstoreAPI.repository.Customer_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

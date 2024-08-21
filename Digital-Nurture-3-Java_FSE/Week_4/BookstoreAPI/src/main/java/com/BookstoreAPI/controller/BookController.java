@@ -1,7 +1,8 @@
-package BookstoreAPI.controller;
+package com.BookstoreAPI.controller;
 
-import BookstoreAPI.model.Book;
-import BookstoreAPI.service.BookService;
+import com.BookstoreAPI.exception.BookAlreadyExistsException;
+import com.BookstoreAPI.model.Book;
+import com.BookstoreAPI.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,8 @@ public class BookController {
         return bookService.getBooksByTitle(title);
     }
 
-    @PostMapping
-    public Book createBook(@RequestBody Book book) {
+    @PostMapping("/post")
+    public Book createBook(@RequestBody Book book) throws BookAlreadyExistsException {
         return bookService.saveBook(book);
     }
 

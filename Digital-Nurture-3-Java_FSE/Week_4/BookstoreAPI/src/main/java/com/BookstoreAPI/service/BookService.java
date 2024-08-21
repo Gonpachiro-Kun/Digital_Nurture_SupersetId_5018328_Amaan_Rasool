@@ -1,7 +1,8 @@
-package BookstoreAPI.service;
+package com.BookstoreAPI.service;
 
-import BookstoreAPI.model.Book;
-import BookstoreAPI.repository.Book_Repository;
+import com.BookstoreAPI.exception.BookAlreadyExistsException;
+import com.BookstoreAPI.model.Book;
+import com.BookstoreAPI.repository.Book_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,15 @@ public class BookService {
         return bookRepository.findByName(title);
     }
 
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
+    public Book saveBook(Book book) throws BookAlreadyExistsException{
+        String mytitle = book.getTitle();
+        List<Book> mybook = bookRepository.findByName(mytitle);
+        if (mybook.isEmpty()){
+            return bookRepository.save(book);
+        }
+        else{
+            throw new BookAlreadyExistsException("Book already exists");
+        }
     }
 
     public void deleteBookById(Long id) {

@@ -1,4 +1,4 @@
-package BookstoreAPI.model;
+package com.BookstoreAPI.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

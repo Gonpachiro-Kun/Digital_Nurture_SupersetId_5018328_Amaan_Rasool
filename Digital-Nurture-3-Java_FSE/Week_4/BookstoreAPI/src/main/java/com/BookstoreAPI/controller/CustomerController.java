@@ -1,7 +1,7 @@
-package BookstoreAPI.controller;
+package com.BookstoreAPI.controller;
 
-import BookstoreAPI.model.Customer;
-import BookstoreAPI.service.CustomerService;
+import com.BookstoreAPI.model.Customer;
+import com.BookstoreAPI.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
