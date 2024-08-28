@@ -1,31 +1,28 @@
 package com.example.EmployeeManagementSystem.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
-@Entity
-@Table(name = "departments")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Component
+@Entity
+@Table(name = "DEPARTMENT")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dept_id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "department")
-    private Set<Employee> employees;
-
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Employee> employees;
 }

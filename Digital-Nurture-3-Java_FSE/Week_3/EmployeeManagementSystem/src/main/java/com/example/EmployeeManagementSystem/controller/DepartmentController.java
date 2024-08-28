@@ -1,52 +1,66 @@
 package com.example.EmployeeManagementSystem.controller;
 
 import com.example.EmployeeManagementSystem.model.Department;
-import com.example.EmployeeManagementSystem.repository.DepartmentRepository;
+import com.example.EmployeeManagementSystem.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/departments")
+@Controller
+@RequestMapping("/department")
 public class DepartmentController {
 
     @Autowired
-    private DepartmentRepository departmentRepository;
+    private DepartmentService departmentService;
 
-    @GetMapping
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    // Create
+    @PostMapping("/add")
+    public ResponseEntity<String> addDepartment(@RequestBody Department department) {
+    departmentService.dept_add(department);
+        departmentService.dept_add(department);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Department Created");
     }
 
-    @GetMapping("/{id}")
+    // Retrieve all
+    @GetMapping("/get")
+    public ResponseEntity<List<Department>> getAllDepartments() {
+        List<Department> departments = departmentService.getall();
+//      List<Department> departments = departmentService.getAllDepartments();
+        return ResponseEntity.status(HttpStatus.OK).body(departments);
+    }
+
+    // Retrieve by ID
+    @GetMapping("/get/{id}")
     public ResponseEntity<Department> getDepartmentById(@PathVariable Long id) {
-        Optional<Department> department = departmentRepository.findById(id);
-        return department.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Department department = departmentService.getDepartmentById(id);
+//        Department department = departmentService.getDepartmentById(id);
+        return department != null
+                ? ResponseEntity.status(HttpStatus.OK).body(department)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
-        return departmentRepository.save(department);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Department> updateDepartment(@PathVariable Long id, @RequestBody Department department) {
-        if (!departmentRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+    // Update
+    public boolean updateDepartment(Long id, Department updatedDepartment) {
+        Optional<Department> existingDepartment = Optional.ofNullable(departmentService.getDepartmentById(id));
+        if (existingDepartment.isPresent()) {
+            Department department = existingDepartment.get();
+            department.setName(updatedDepartment.getName()); // Update other fields if necessary
+            return true;
         }
-        department.setId(id);
-        return ResponseEntity.ok(departmentRepository.save(department));
+        return false;
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
-        if (!departmentRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        departmentRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    // Delete
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteDepartment(@PathVariable Long id) {
+        boolean isDeleted = departmentService.delete(id);
+        return isDeleted
+                ? ResponseEntity.status(HttpStatus.ACCEPTED).body("Department Deleted")
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department Not Found");
     }
 }
